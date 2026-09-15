@@ -1,0 +1,1264 @@
+<title>Seguimiento de Postulaciones</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --ground: #f6f7f9;
+    --surface: #ffffff;
+    --surface-2: #eef1f5;
+    --ink: #14171c;
+    --ink-2: #5b6270;
+    --ink-3: #8a919e;
+    --line: #e3e6eb;
+    --line-2: #cfd4dc;
+    --accent: #1c5cab;
+    --accent-ink: #ffffff;
+    --accent-soft: #e4eefb;
+    --good: #0ca30c;  --good-soft: #e3f6e3;
+    --warn: #fab219;  --warn-soft: #fff2d1;
+    --serious: #ec835a; --serious-soft: #fde7de;
+    --crit: #d03b3b;  --crit-soft: #fbe1e1;
+    --c1: #2a78d6;
+    --c1-soft: #9ec5f4;
+    --gray-mark: #bfc5ce;
+    --o1: #86b6ef; --o2: #6da7ec; --o3: #5598e7; --o4: #3987e5; --o5: #2a78d6; --o6: #256abf; --o7: #1c5cab;
+    --grid: #e3e6eb;
+    --axis: #cfd4dc;
+    --pill-sug: #ede9fb; --pill-sug-ink: #4a3aa7;
+    --pill-act: #e4eefb; --pill-act-ink: #1c5cab;
+    --pill-pro: #d9ecff; --pill-pro-ink: #0d366b;
+    --pill-of:  #e3f6e3; --pill-of-ink: #006300;
+    --pill-cer: #eceef2; --pill-cer-ink: #5b6270;
+    --shadow: 0 1px 2px rgba(20,23,28,.06);
+    --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #101216;
+      --surface: #1a1d23;
+      --surface-2: #232730;
+      --ink: #f2f3f5;
+      --ink-2: #aeb4bf;
+      --ink-3: #7d8593;
+      --line: #2a2f38;
+      --line-2: #3a404b;
+      --accent: #5598e7;
+      --accent-ink: #0b1a2e;
+      --accent-soft: #1b2c45;
+      --good-soft: #163d16; --warn-soft: #4a3607; --serious-soft: #4a2416; --crit-soft: #4a1717;
+      --c1: #3987e5;
+      --c1-soft: #1c5cab;
+      --gray-mark: #4a505b;
+      --o1: #184f95; --o2: #1c5cab; --o3: #256abf; --o4: #2a78d6; --o5: #3987e5; --o6: #5598e7; --o7: #6da7ec;
+      --grid: #2a2f38;
+      --axis: #3a404b;
+      --pill-sug: #2b2550; --pill-sug-ink: #b9b0f5;
+      --pill-act: #1b2c45; --pill-act-ink: #9ec5f4;
+      --pill-pro: #143152; --pill-pro-ink: #b7d3f6;
+      --pill-of:  #163d16; --pill-of-ink: #8fe08f;
+      --pill-cer: #232730; --pill-cer-ink: #aeb4bf;
+      --shadow: 0 1px 2px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #101216;
+    --surface: #1a1d23;
+    --surface-2: #232730;
+    --ink: #f2f3f5;
+    --ink-2: #aeb4bf;
+    --ink-3: #7d8593;
+    --line: #2a2f38;
+    --line-2: #3a404b;
+    --accent: #5598e7;
+    --accent-ink: #0b1a2e;
+    --accent-soft: #1b2c45;
+    --good-soft: #163d16; --warn-soft: #4a3607; --serious-soft: #4a2416; --crit-soft: #4a1717;
+    --c1: #3987e5;
+    --c1-soft: #1c5cab;
+    --gray-mark: #4a505b;
+    --o1: #184f95; --o2: #1c5cab; --o3: #256abf; --o4: #2a78d6; --o5: #3987e5; --o6: #5598e7; --o7: #6da7ec;
+    --grid: #2a2f38;
+    --axis: #3a404b;
+    --pill-sug: #2b2550; --pill-sug-ink: #b9b0f5;
+    --pill-act: #1b2c45; --pill-act-ink: #9ec5f4;
+    --pill-pro: #143152; --pill-pro-ink: #b7d3f6;
+    --pill-of:  #163d16; --pill-of-ink: #8fe08f;
+    --pill-cer: #232730; --pill-cer-ink: #aeb4bf;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--ground); }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font: 14px/1.45 var(--sans); -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); }
+  button, select, input { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .mono { font-family: var(--mono); }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-2); font-weight: 500;
+  }
+  h1, h2, h3 { margin: 0; text-wrap: balance; font-weight: 600; }
+  h1 { font-size: 20px; letter-spacing: -.01em; }
+  h2 { font-size: 15px; }
+
+  /* ---------- header ---------- */
+  .top {
+    position: sticky; top: 0; z-index: 20; background: var(--ground);
+    border-bottom: 1px solid var(--line);
+  }
+  .top-in {
+    max-width: 1240px; margin: 0 auto; padding: 12px 20px;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .top-title { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .top-sub { color: var(--ink-2); font-size: 12.5px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .top-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .conn {
+    display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 999px;
+    border: 1px solid var(--line); font-size: 12px; color: var(--ink-2); background: var(--surface);
+  }
+  .conn i { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-3); display: inline-block; }
+  .conn[data-state="ok"] i { background: var(--good); }
+  .conn[data-state="stale"] i { background: var(--warn); }
+  .conn[data-state="off"] i { background: var(--crit); }
+  .conn[data-state="wait"] i { background: var(--ink-3); animation: pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .3; } }
+  .btn {
+    border: 1px solid var(--line-2); background: var(--surface); color: var(--ink);
+    padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: 500; box-shadow: var(--shadow);
+  }
+  .btn:hover:not(:disabled) { border-color: var(--accent); }
+  .btn:disabled { opacity: .55; cursor: default; }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .btn-sm { padding: 3px 8px; font-size: 12px; border-radius: 6px; box-shadow: none; }
+  .btn-link { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font-size: 12.5px; }
+
+  /* ---------- page ---------- */
+  main { max-width: 1240px; margin: 0 auto; padding: 18px 20px 48px; display: flex; flex-direction: column; gap: 18px; }
+  .banner {
+    border: 1px solid var(--line-2); border-left: 4px solid var(--warn); background: var(--surface);
+    padding: 10px 14px; border-radius: 8px; display: flex; gap: 12px; align-items: flex-start;
+  }
+  .banner[data-kind="crit"] { border-left-color: var(--crit); }
+  .banner[data-kind="info"] { border-left-color: var(--accent); }
+  .banner b { font-weight: 600; }
+  .banner p { margin: 0; color: var(--ink-2); }
+
+  .kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  .kpi {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 10px;
+    display: flex; flex-direction: column; gap: 4px; min-width: 0;
+  }
+  .kpi .val { font-size: 28px; font-weight: 600; line-height: 1.1; letter-spacing: -.01em; }
+  .kpi .val small { font-size: 14px; font-weight: 500; color: var(--ink-2); margin-left: 4px; }
+  .kpi .sub { font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+  .kpi[data-tone="crit"] .val { color: var(--crit); }
+  .kpi[data-tone="good"] .val { color: var(--good); }
+
+  .band-a { display: grid; grid-template-columns: 7fr 5fr; gap: 14px; }
+  .band-b { display: grid; grid-template-columns: 5fr 4fr 3fr; gap: 14px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 16px;
+    display: flex; flex-direction: column; gap: 10px; min-width: 0;
+  }
+  .card-head { display: flex; align-items: baseline; gap: 10px; }
+  .card-head .hint { color: var(--ink-3); font-size: 12px; }
+  .card-head .tools { margin-left: auto; display: flex; gap: 6px; }
+  .card-foot { color: var(--ink-2); font-size: 12px; border-top: 1px solid var(--line); padding-top: 8px; }
+  .loading { opacity: .45; transition: opacity .2s; }
+  .placeholder { color: var(--ink-3); font-size: 13px; padding: 12px 0; }
+
+  /* ---------- actions ---------- */
+  .grp { border-top: 1px solid var(--line); }
+  .grp:first-of-type { border-top: 0; }
+  .grp summary {
+    cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; padding: 9px 0;
+    font-weight: 600; font-size: 13.5px;
+  }
+  .grp summary::-webkit-details-marker { display: none; }
+  .grp summary::before { content: "▸"; color: var(--ink-3); font-size: 11px; width: 10px; }
+  .grp[open] summary::before { content: "▾"; }
+  .grp summary .n {
+    font-family: var(--mono); font-size: 11.5px; padding: 1px 7px; border-radius: 999px;
+    background: var(--surface-2); color: var(--ink-2);
+  }
+  .grp summary .n[data-tone="crit"] { background: var(--crit-soft); color: var(--crit); }
+  .grp summary .n[data-tone="warn"] { background: var(--warn-soft); color: #7a5200; }
+  :root[data-theme="dark"] .grp summary .n[data-tone="warn"] { color: #ffd479; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .grp summary .n[data-tone="warn"] { color: #ffd479; } }
+  .grp ul { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .item {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: start;
+    padding: 8px 10px; border-radius: 8px; background: var(--surface-2); cursor: pointer;
+  }
+  .item:hover { outline: 1px solid var(--line-2); }
+  .item .chip {
+    font-family: var(--mono); font-size: 11px; padding: 2px 7px; border-radius: 6px; white-space: nowrap;
+    background: var(--surface); border: 1px solid var(--line-2); color: var(--ink-2); margin-top: 1px;
+  }
+  .item .chip[data-tone="crit"] { background: var(--crit-soft); border-color: transparent; color: var(--crit); }
+  .item .chip[data-tone="warn"] { background: var(--warn-soft); border-color: transparent; color: #7a5200; }
+  .item .chip[data-tone="good"] { background: var(--good-soft); border-color: transparent; color: #006300; }
+  :root[data-theme="dark"] .item .chip[data-tone="warn"] { color: #ffd479; }
+  :root[data-theme="dark"] .item .chip[data-tone="good"] { color: #8fe08f; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .item .chip[data-tone="warn"] { color: #ffd479; }
+    :root:not([data-theme="light"]) .item .chip[data-tone="good"] { color: #8fe08f; }
+  }
+  .item .who { min-width: 0; }
+  .item .who b { font-weight: 600; }
+  .item .who .why { color: var(--ink-2); font-size: 12.5px; }
+  .item .links { display: flex; gap: 6px; }
+  .ico {
+    display: inline-flex; width: 24px; height: 24px; border-radius: 6px; align-items: center; justify-content: center;
+    color: var(--ink-2); text-decoration: none; border: 1px solid transparent; font-size: 12px;
+  }
+  .ico:hover { border-color: var(--line-2); color: var(--accent); }
+  .more { padding: 2px 0 6px 20px; }
+
+  /* ---------- charts ---------- */
+  .chart { width: 100%; overflow: visible; }
+  .chart text { font-family: var(--sans); font-size: 12px; fill: var(--ink-2); }
+  .chart .lbl { fill: var(--ink); font-weight: 500; }
+  .chart .val { fill: var(--ink); font-family: var(--mono); font-size: 11.5px; }
+  .chart .val-in { fill: #fff; font-family: var(--mono); font-size: 11px; }
+  .chart .tick { fill: var(--ink-3); font-family: var(--mono); font-size: 10.5px; }
+  .chart .grid { stroke: var(--grid); stroke-width: 1; }
+  .chart .axis { stroke: var(--axis); stroke-width: 1; }
+  .chart .sep { stroke: var(--line-2); stroke-width: 1; stroke-dasharray: none; }
+  .chart .mark { transition: opacity .12s; }
+  .chart .mark:hover, .chart .hit:hover + .mark, .chart .hit:focus-visible + .mark { opacity: .8; }
+  .chart .hit { fill: transparent; cursor: default; outline: none; }
+  .chart .hit:focus-visible { stroke: var(--accent); stroke-width: 2; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .twin { font-size: 12.5px; }
+  .twin table { border-collapse: collapse; width: 100%; }
+  .twin th, .twin td { text-align: left; padding: 4px 8px; border-bottom: 1px solid var(--line); }
+  .twin td.num, .twin th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip-c {
+    display: inline-flex; gap: 6px; align-items: center; padding: 3px 9px; border-radius: 999px;
+    background: var(--surface-2); font-size: 12.5px;
+  }
+  .chip-c b { font-family: var(--mono); font-weight: 500; }
+
+  /* ---------- tooltip ---------- */
+  .tip {
+    position: fixed; z-index: 50; pointer-events: none; background: var(--ink); color: var(--ground);
+    padding: 7px 10px; border-radius: 7px; font-size: 12px; max-width: 280px; box-shadow: 0 4px 14px rgba(0,0,0,.25);
+  }
+  .tip b { font-weight: 600; font-size: 13px; }
+  .tip .row { display: flex; gap: 8px; align-items: center; }
+  .tip .row i { width: 10px; height: 2px; display: inline-block; border-radius: 1px; }
+  .tip .muted { opacity: .7; }
+
+  /* ---------- table ---------- */
+  .filters {
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px 12px 0 0; padding: 10px 14px;
+  }
+  .filters select, .filters input[type="search"] {
+    border: 1px solid var(--line-2); background: var(--ground); border-radius: 7px; padding: 5px 8px; min-width: 0;
+  }
+  .filters input[type="search"] { width: 220px; }
+  .filters label { display: inline-flex; gap: 6px; align-items: center; color: var(--ink-2); font-size: 13px; }
+  .filters .count { margin-left: auto; color: var(--ink-2); font-size: 12.5px; }
+  .tbl-wrap {
+    background: var(--surface); border: 1px solid var(--line); border-top: 0; border-radius: 0 0 12px 12px;
+    overflow-x: auto;
+  }
+  table.tbl { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 980px; font-size: 13px; }
+  .tbl th {
+    position: sticky; top: 0; background: var(--surface); text-align: left; font-weight: 600;
+    padding: 9px 10px; border-bottom: 1px solid var(--line-2); white-space: nowrap; z-index: 2;
+  }
+  .tbl th button { background: none; border: 0; padding: 0; font: inherit; font-weight: 600; cursor: pointer; color: inherit; }
+  .tbl th button[data-dir]::after { content: " ↓"; color: var(--ink-3); }
+  .tbl th button[data-dir="asc"]::after { content: " ↑"; }
+  .tbl td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .tbl tr.row { cursor: pointer; }
+  .tbl tr.row:hover td { background: var(--surface-2); }
+  .tbl tr.row.flash td { animation: flash 1.6s ease-out; }
+  @keyframes flash { 0% { background: var(--accent-soft); } 100% { background: transparent; } }
+  .tbl td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tbl td.cerr, .tbl tr.cerrada td.num { color: var(--ink-3); }
+  .tbl .who b { font-weight: 600; }
+  .tbl .who .p { color: var(--ink-2); font-size: 12.5px; }
+  .tbl .who .r { display: flex; gap: 4px; align-items: center; margin-top: 3px; }
+  .match {
+    font-family: var(--mono); font-size: 11px; padding: 0 5px; border-radius: 5px;
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .pill {
+    display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; white-space: nowrap;
+    background: var(--pill-cer); color: var(--pill-cer-ink);
+  }
+  .pill[data-g="sugerida"] { background: var(--pill-sug); color: var(--pill-sug-ink); }
+  .pill[data-g="activo"] { background: var(--pill-act); color: var(--pill-act-ink); }
+  .pill[data-g="proceso"] { background: var(--pill-pro); color: var(--pill-pro-ink); }
+  .pill[data-g="oferta"] { background: var(--pill-of); color: var(--pill-of-ink); }
+  .pill[data-g="sin_estado"], .pill[data-g="desconocido"] { background: transparent; border: 1px dashed var(--line-2); color: var(--ink-2); }
+  .seg { font-size: 12.5px; }
+  .seg .d { font-family: var(--mono); font-size: 11px; padding: 1px 6px; border-radius: 5px; background: var(--surface-2); }
+  .seg .d[data-tone="crit"] { background: var(--crit-soft); color: var(--crit); }
+  .seg .d[data-tone="warn"] { background: var(--warn-soft); color: #7a5200; }
+  :root[data-theme="dark"] .seg .d[data-tone="warn"] { color: #ffd479; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .seg .d[data-tone="warn"] { color: #ffd479; } }
+  .fb { color: var(--ink-2); font-size: 12.5px; max-width: 260px; }
+  .detail td { background: var(--surface-2); padding: 12px 14px 14px 44px; }
+  .detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 20px; font-size: 12.5px; }
+  .detail-grid div b { display: block; font-weight: 500; color: var(--ink-2); font-size: 11.5px; }
+  .detail pre { white-space: pre-wrap; font: inherit; margin: 10px 0 0; max-width: 90ch; }
+  .col-hide { }
+  .empty { padding: 30px; text-align: center; color: var(--ink-2); }
+
+  footer { color: var(--ink-2); font-size: 12.5px; max-width: 1240px; margin: 0 auto; padding: 0 20px 40px; }
+  footer h3 { font-size: 12px; margin-bottom: 6px; }
+  footer dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 0; }
+  footer dt { font-weight: 600; color: var(--ink); }
+  footer dd { margin: 0; }
+  .sr { position: absolute; left: -9999px; }
+
+  @media (max-width: 1000px) {
+    .kpis { grid-template-columns: repeat(3, 1fr); }
+    .band-a, .band-b { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .kpis { grid-template-columns: repeat(2, 1fr); }
+    .top-actions { width: 100%; margin-left: 0; }
+    .top-actions .btn { flex: 1; }
+    .col-hide { display: none; }
+    .tbl td:first-child, .tbl th:first-child { position: sticky; left: 0; background: var(--surface); z-index: 1; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .filters input[type="search"] { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="top-title">
+      <h1>Seguimiento de postulaciones</h1>
+      <div class="top-sub">
+        <span id="sub-count">Tabla Postulaciones · Airtable</span>
+        <span id="sub-fresh" class="mono"></span>
+      </div>
+    </div>
+    <div class="top-actions">
+      <span class="conn" id="conn" data-state="wait"><i></i><span>Conectando…</span></span>
+      <button class="btn btn-primary" id="btn-refresh" disabled>Actualizar</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="banner" class="banner" role="status" hidden></div>
+
+  <section class="kpis" id="kpis" aria-label="Indicadores"></section>
+
+  <section class="band-a">
+    <article class="card" id="card-acciones">
+      <div class="card-head"><h2>Acciones pendientes</h2><span class="hint" id="acc-hint">qué hacer hoy</span></div>
+      <div id="acciones"><div class="placeholder">Conectando con claude.ai…</div></div>
+    </article>
+    <article class="card" id="card-estado">
+      <div class="card-head"><h2>Estado actual</h2><span class="hint">en orden del proceso</span>
+        <div class="tools"><button class="btn btn-sm" data-twin="estado">Ver tabla</button></div></div>
+      <div id="estado"><div class="placeholder">Sin datos todavía.</div></div>
+      <div class="card-foot" id="estado-foot"></div>
+    </article>
+  </section>
+
+  <section class="band-b">
+    <article class="card" id="card-semanas">
+      <div class="card-head"><h2>Postulaciones por semana</h2><span class="hint">últimas 8 semanas</span>
+        <div class="tools"><button class="btn btn-sm" data-twin="semanas">Ver tabla</button></div></div>
+      <div id="semanas"><div class="placeholder">Sin datos todavía.</div></div>
+    </article>
+    <article class="card" id="card-fuentes">
+      <div class="card-head"><h2>Efectividad por fuente</h2>
+        <div class="tools"><button class="btn btn-sm" data-twin="fuentes">Ver tabla</button></div></div>
+      <div class="legend" id="fuentes-legend"></div>
+      <div id="fuentes"><div class="placeholder">Sin datos todavía.</div></div>
+    </article>
+    <article class="card" id="card-perfil">
+      <div class="card-head"><h2>Perfil de la búsqueda</h2></div>
+      <div id="perfil"><div class="placeholder">Sin datos todavía.</div></div>
+    </article>
+  </section>
+
+  <section aria-label="Todas las postulaciones">
+    <div class="filters">
+      <select id="f-estado" aria-label="Filtrar por estado">
+        <option value="">Todos los estados</option>
+        <optgroup label="Grupos">
+          <option value="g:activo,proceso,oferta">Activas (en pipeline)</option>
+          <option value="g:proceso,oferta">En proceso</option>
+          <option value="g:cerrado">Cerradas</option>
+          <option value="g:sugerida">Sugeridas</option>
+          <option value="g:sin_estado,desconocido">Sin estado</option>
+        </optgroup>
+        <optgroup label="Estados" id="f-estado-list"></optgroup>
+      </select>
+      <select id="f-fuente" aria-label="Filtrar por fuente"><option value="">Todas las fuentes</option></select>
+      <input type="search" id="f-q" placeholder="Buscar empresa, puesto, notas…" aria-label="Buscar">
+      <label><input type="checkbox" id="f-cerr"> Ocultar cerradas</label>
+      <span class="count" id="f-count"></span>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl" id="tbl">
+        <thead><tr>
+          <th><button data-sort="empresa">Empresa / Puesto</button></th>
+          <th><button data-sort="estado">Estado</button></th>
+          <th><button data-sort="fecha" data-dir="desc">Postulación</button></th>
+          <th class="num"><button data-sort="dias">Días</button></th>
+          <th><button data-sort="fuente">Fuente</button></th>
+          <th class="col-hide">País · Tipo</th>
+          <th class="col-hide">Sueldo</th>
+          <th>Seguimiento</th>
+          <th>Feedback / brechas</th>
+        </tr></thead>
+        <tbody id="tbody"><tr><td colspan="9" class="empty">Conectando con claude.ai…</td></tr></tbody>
+      </table>
+    </div>
+    <p class="hint" style="color: var(--ink-3); font-size: 12px; margin: 8px 2px 0;">
+      Los filtros solo afectan a esta tabla; los indicadores y gráficos usan todos los registros. Solo lectura: edita en Airtable desde el enlace de cada fila.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <h3 class="eyebrow">Cómo se calcula</h3>
+  <dl>
+    <dt>Postuladas</dt><dd>Todo registro con estado Postulado, Test previo, entrevistas, Oferta, Rechazado, Sin respuesta o Retirado. Quedan fuera Sugerida y los registros sin estado.</dd>
+    <dt>Pipeline activo</dt><dd>Postuladas que no están cerradas (Rechazado, Sin respuesta, Retirado).</dd>
+    <dt>En proceso</dt><dd>Pasaron de Postulado: Test previo, cualquier entrevista u Oferta recibida.</dd>
+    <dt>Tasa de respuesta</dt><dd>Postuladas que llegaron a Test previo, entrevista u oferta (por estado o porque tienen fecha de entrevista) entre todas las postuladas.</dd>
+    <dt>Estancada</dt><dd>Postulado hace 14 días o más, sin fecha de entrevista ni seguimiento programado. A los 30 días se sugiere marcarla como Sin respuesta.</dd>
+    <dt>Fecha ≈</dt><dd>Sin Fecha de postulación: se usa la fecha de creación del registro (hora de Santiago).</dd>
+    <dt>Semanas</dt><dd>De lunes a domingo, hora de Santiago.</dd>
+  </dl>
+</footer>
+
+<div id="tip" class="tip" hidden></div>
+
+<script>
+(() => {
+  'use strict';
+
+  // ---------- constantes ----------
+  // Ajusta estos tres bloques a tu base: ID de la base, ID de la tabla y los IDs de campo
+  // (Airtable → menú del campo → "Copiar ID de campo"). El resto de la página no cambia.
+  const BASE = 'appXXXXXXXXXXXXXX';
+  const TABLA = 'tblXXXXXXXXXXXXXX';
+  const SERVER = 'Airtable';
+  const TOOL = 'list_records_for_table';
+  const INPUT = { baseId: BASE, tableId: TABLA, pageSize: 500 };
+  const F = {
+    empresa: 'fldVPI9EyzjVjg7Xj', puesto: 'fldHRpRIRWnSCxShv', pais: 'fldwNyMXqRNCjKdrH',
+    tipo: 'fldZadOA4HRXds2k3', fuente: 'fldqJYguDKdPztt1a', cv: 'fldPVpBpW3V5vqv0F',
+    fechaPost: 'fldIhqWmNlUkk6XO1', estado: 'fldwPV6PPL5zZ55ZS', f1: 'fldYYlwKbYrV4R230',
+    f2: 'fldEcLSF1sqXgK4ng', rangoPub: 'fldx9kllUEe7YDwdL', sueldoConf: 'fldOTlNvBUftKcLO8',
+    feedback: 'fldkRQ4W0wdrznIhk', proxAccion: 'fldn9xqcAMcSagXe3', fechaSeg: 'fldjQUDC43U0APbaN',
+  };
+  const DIAS_ESTANCADA = 14;
+  const DIAS_SIN_RESPUESTA = 30;
+  const ESTADOS = {
+    'Sugerida': { orden: 0, grupo: 'sugerida' },
+    'Postulado': { orden: 1, grupo: 'activo' },
+    'Aplicado': { orden: 1, grupo: 'activo', canon: 'Postulado' },
+    'Test previo realizado': { orden: 2, grupo: 'proceso' },
+    '1ª entrevista agendada': { orden: 3, grupo: 'proceso' },
+    '1ª entrevista realizada': { orden: 4, grupo: 'proceso' },
+    '2ª entrevista agendada': { orden: 5, grupo: 'proceso' },
+    '2ª entrevista realizada': { orden: 6, grupo: 'proceso' },
+    'Oferta recibida': { orden: 7, grupo: 'oferta' },
+    'Rechazado': { orden: 8, grupo: 'cerrado' },
+    'Sin respuesta': { orden: 9, grupo: 'cerrado' },
+    'Retirado': { orden: 10, grupo: 'cerrado' },
+    'Descartada': { orden: 11, grupo: 'descartada' },
+  };
+  const ETAPAS = ['Postulado', 'Test previo realizado', '1ª entrevista agendada', '1ª entrevista realizada',
+    '2ª entrevista agendada', '2ª entrevista realizada', 'Oferta recibida'];
+  const TERMINALES = ['Rechazado', 'Sin respuesta', 'Retirado'];
+  const P_GRUPOS = new Set(['activo', 'proceso', 'oferta', 'cerrado']);
+
+  // ---------- utilidades DOM ----------
+  const $ = (s, r = document) => r.querySelector(s);
+  function el(tag, attrs = {}, ...kids) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v == null || v === false) continue;
+      if (k === 'class') n.className = v;
+      else if (k === 'text') n.textContent = v;
+      else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? '' : v);
+    }
+    for (const c of kids.flat(Infinity)) {
+      if (c == null || c === false) continue;
+      n.append(c.nodeType ? c : document.createTextNode(String(c)));
+    }
+    return n;
+  }
+  function svg(tag, attrs = {}, ...kids) {
+    const n = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const [k, v] of Object.entries(attrs)) { if (v != null) n.setAttribute(k, v); }
+    for (const c of kids.flat(Infinity)) { if (c != null) n.append(c.nodeType ? c : document.createTextNode(String(c))); }
+    return n;
+  }
+  const clear = n => { while (n.firstChild) n.removeChild(n.firstChild); return n; };
+
+  // ---------- fechas (calendario, hora de Santiago) ----------
+  const DAY = 86400000;
+  const fmtCA = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Santiago', year: 'numeric', month: '2-digit', day: '2-digit' });
+  const fmtHora = new Intl.DateTimeFormat('es-CL', { timeZone: 'America/Santiago', hour: '2-digit', minute: '2-digit' });
+  const hoySantiago = () => fmtCA.format(new Date());
+  const fechaSantiago = iso => { try { return fmtCA.format(new Date(iso)); } catch (e) { return ''; } };
+  const esFecha = s => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s);
+  const utc = s => { const [y, m, d] = s.split('-').map(Number); return Date.UTC(y, m - 1, d); };
+  const isoDe = t => new Date(t).toISOString().slice(0, 10);
+  const diasEntre = (a, b) => Math.round((utc(b) - utc(a)) / DAY);
+  const sumarDias = (s, n) => isoDe(utc(s) + n * DAY);
+  const lunesDe = s => { const t = utc(s); const dow = (new Date(t).getUTCDay() + 6) % 7; return isoDe(t - dow * DAY); };
+  const DIAS_ES = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
+  const fmtCorta = s => esFecha(s) ? `${s.slice(8, 10)}-${s.slice(5, 7)}` : '—';
+  const fmtLarga = s => esFecha(s) ? `${s.slice(8, 10)}-${s.slice(5, 7)}-${s.slice(0, 4)}` : '—';
+  const fmtConDia = s => esFecha(s) ? `${DIAS_ES[new Date(utc(s)).getUTCDay()]} ${fmtCorta(s)}` : '—';
+  const plural = (n, s, p) => `${n} ${n === 1 ? s : p}`;
+  const hace = n => n === 0 ? 'hoy' : n === 1 ? 'hace 1 día' : `hace ${n} días`;
+  const dentro = n => n === 0 ? 'hoy' : n === 1 ? 'mañana' : `en ${n} días`;
+  const sinAcentos = s => String(s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+
+  const URL_RE = /Enlace:\s*(https?:\/\/[^\s<>"')\]]+)/i;
+  const URL_ANY = /(https?:\/\/[^\s<>"')\]]+)/;
+  const MATCH_RE = /Match:\s*(\d{1,3})\/100/;
+
+  // ---------- normalización ----------
+  function normalizar(rec, hoy) {
+    const c = rec.cellValuesByFieldId || {};
+    const raw = k => c[F[k]];
+    const txt = k => { const v = raw(k); if (v == null) return ''; return typeof v === 'object' ? String(v.name ?? '') : String(v); };
+    const fecha = k => { const v = raw(k); return esFecha(v) ? v : ''; };
+
+    const estadoNombre = txt('estado').normalize('NFC').trim();
+    const def = estadoNombre ? ESTADOS[estadoNombre] : null;
+    const estado = !estadoNombre ? { canon: 'Sin estado', orden: 98, grupo: 'sin_estado' }
+      : def ? { canon: def.canon || estadoNombre, orden: def.orden, grupo: def.grupo }
+      : { canon: estadoNombre, orden: 99, grupo: 'desconocido' };
+
+    const feedback = txt('feedback');
+    const mUrl = URL_RE.exec(feedback) || URL_ANY.exec(feedback);
+    const url = mUrl ? mUrl[1].replace(/[.,;]+$/, '') : '';
+    const mMatch = MATCH_RE.exec(feedback);
+    const match = mMatch ? Number(mMatch[1]) : null;
+
+    const creado = rec.createdTime ? fechaSantiago(rec.createdTime) : '';
+    const fechaPost = fecha('fechaPost');
+    const esSugerida = estado.grupo === 'sugerida';
+    const fechaEstimada = !fechaPost && !esSugerida && !!creado;
+    const fechaEf = fechaPost || (esSugerida ? '' : creado);
+    const f1 = fecha('f1'), f2 = fecha('f2'), fechaSeg = fecha('fechaSeg');
+    const enP = P_GRUPOS.has(estado.grupo);
+    const avanzo = enP && ((estado.orden >= 2 && estado.orden <= 7) || !!f1 || !!f2);
+    const rangoPub = txt('rangoPub'), sueldoConf = txt('sueldoConf');
+    const sueldoBot = !!sueldoConf && !rangoPub && estado.orden < 7;
+
+    return {
+      id: rec.id, creado, creadoISO: rec.createdTime || '',
+      empresa: txt('empresa') || '(sin empresa)', puesto: txt('puesto') || '(sin puesto)',
+      pais: txt('pais'), tipo: txt('tipo'), fuente: txt('fuente'), cv: txt('cv'),
+      fechaPost, fechaEf, fechaEstimada, estadoRaw: estadoNombre, estado,
+      f1, f2, rangoPub, sueldoConf, sueldoBot,
+      sueldo: rangoPub || sueldoConf, sueldoEtiqueta: rangoPub ? '' : (sueldoBot ? '(publicado)' : ''),
+      feedback, proxAccion: txt('proxAccion'), fechaSeg, url, match,
+      dias: fechaEf ? diasEntre(fechaEf, hoy) : null,
+      diasCreado: creado ? diasEntre(creado, hoy) : null,
+      enP, avanzo,
+      activo: ['activo', 'proceso', 'oferta'].includes(estado.grupo),
+      enProceso: ['proceso', 'oferta'].includes(estado.grupo),
+      cerrado: estado.grupo === 'cerrado',
+    };
+  }
+
+  // ---------- derivación ----------
+  function mediana(xs) { if (!xs.length) return null; const s = [...xs].sort((a, b) => a - b); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+
+  function derivar(records, hoy) {
+    const filas = records.map(r => normalizar(r, hoy));
+    const P = filas.filter(f => f.enP);
+    const activas = filas.filter(f => f.activo);
+    const proceso = filas.filter(f => f.enProceso);
+    const sugeridas = filas.filter(f => f.estado.grupo === 'sugerida');
+    const avanzaron = P.filter(f => f.avanzo);
+    const rechazadas = P.filter(f => f.estado.canon === 'Rechazado');
+    const sinResp = P.filter(f => f.estado.canon === 'Sin respuesta');
+    const retiradas = P.filter(f => f.estado.canon === 'Retirado');
+
+    // semanas ISO (8)
+    const lunesHoy = lunesDe(hoy);
+    const semanas = Array.from({ length: 8 }, (_, i) => sumarDias(lunesHoy, -(7 - i) * 7))
+      .map(l => ({ lunes: l, n: 0, empresas: [], enCurso: l === lunesHoy }));
+    const porLunes = new Map(semanas.map(s => [s.lunes, s]));
+    for (const f of P) { if (!f.fechaEf) continue; const s = porLunes.get(lunesDe(f.fechaEf)); if (s) { s.n++; s.empresas.push(f.empresa); } }
+
+    // mediana a 1ª entrevista (fechas reales)
+    const difs = filas.filter(f => f.fechaPost && f.f1 && diasEntre(f.fechaPost, f.f1) >= 0).map(f => diasEntre(f.fechaPost, f.f1));
+    const medianaEntrevista = { valor: mediana(difs), n: difs.length };
+
+    // estado actual
+    const conteo = new Map();
+    for (const f of filas) conteo.set(f.estado.canon, (conteo.get(f.estado.canon) || 0) + 1);
+    const estadoFilas = [
+      ...ETAPAS.map((e, i) => ({ nombre: e, n: conteo.get(e) || 0, tipo: 'etapa', paso: i })),
+      ...TERMINALES.map(e => ({ nombre: e, n: conteo.get(e) || 0, tipo: 'terminal' })),
+    ];
+    for (const extra of ['Sugerida', 'Descartada', 'Sin estado']) if (conteo.get(extra)) estadoFilas.push({ nombre: extra, n: conteo.get(extra), tipo: 'otro' });
+    for (const f of filas) if (f.estado.grupo === 'desconocido' && !estadoFilas.some(x => x.nombre === f.estado.canon)) estadoFilas.push({ nombre: f.estado.canon, n: conteo.get(f.estado.canon), tipo: 'otro' });
+
+    // fuentes
+    const fuentes = new Map();
+    for (const f of P) {
+      const k = f.fuente || 'Sin fuente';
+      const o = fuentes.get(k) || { fuente: k, avanzo: 0, pendiente: 0, cerrada: 0, total: 0 };
+      o.total++;
+      if (f.avanzo) o.avanzo++; else if (f.cerrado) o.cerrada++; else o.pendiente++;
+      fuentes.set(k, o);
+    }
+    const fuentesFilas = [...fuentes.values()].sort((a, b) => b.total - a.total || a.fuente.localeCompare(b.fuente));
+
+    // perfil
+    const cuenta = (xs, key, vacio) => { const m = new Map(); for (const f of xs) { const k = f[key] || vacio; m.set(k, (m.get(k) || 0) + 1); } return [...m.entries()].sort((a, b) => b[1] - a[1]); };
+    const perfil = { pais: cuenta(P, 'pais', 'Sin país'), tipo: cuenta(P, 'tipo', 'Sin tipo'), cvs: P.filter(f => f.cv).length };
+
+    // próxima entrevista
+    const proximas = [];
+    for (const f of filas) {
+      if (f.cerrado) continue;
+      for (const [k, fecha] of [['1ª', f.f1], ['2ª', f.f2]]) {
+        if (fecha && diasEntre(hoy, fecha) >= 0) proximas.push({ f, k, fecha, en: diasEntre(hoy, fecha) });
+      }
+    }
+    proximas.sort((a, b) => a.en - b.en);
+
+    // acciones
+    const acciones = construirAcciones(filas, hoy, proximas);
+
+    // esta semana / anterior
+    const estaSemana = semanas[7].n, semanaPasada = semanas[6].n;
+
+    return {
+      filas, P, activas, proceso, sugeridas, avanzaron, rechazadas, sinResp, retiradas,
+      semanas, medianaEntrevista, estadoFilas, fuentesFilas, perfil, proximas, acciones,
+      estaSemana, semanaPasada, hoy,
+      estadosPresentes: [...conteo.keys()].sort((a, b) => (ESTADOS[a]?.orden ?? 98) - (ESTADOS[b]?.orden ?? 98)),
+      fuentesPresentes: [...new Set(filas.map(f => f.fuente).filter(Boolean))].sort(),
+    };
+  }
+
+  function construirAcciones(filas, hoy, proximas) {
+    const grupos = [];
+    const add = (id, titulo, items, opts = {}) => grupos.push({ id, titulo, items, tono: opts.tono || '', abierto: opts.abierto ?? true, cuenta: opts.cuenta ?? true });
+
+    // 0 ofertas
+    add('ofertas', 'Ofertas por responder',
+      filas.filter(f => f.estado.canon === 'Oferta recibida')
+        .sort((a, b) => (b.creadoISO > a.creadoISO ? 1 : -1))
+        .map(f => ({ f, chip: 'Oferta', tono: 'good', motivo: `Oferta recibida · Sueldo: ${f.sueldo || '—'} · Próxima acción: ${f.proxAccion || '—'}` })),
+      { tono: 'good' });
+
+    // 1 entrevistas
+    add('entrevistas', 'Entrevistas (hoy y próximos 14 días)',
+      proximas.filter(p => p.en <= 14).map(p => ({
+        f: p.f, chip: p.en === 0 ? 'hoy' : dentro(p.en), tono: p.en === 0 ? 'warn' : p.en <= 2 ? 'warn' : '',
+        motivo: `${p.k} entrevista ${p.en === 0 ? 'hoy' : fmtConDia(p.fecha)}${p.f.cv ? ' · CV: ' + p.f.cv : ''}`,
+      })), { tono: 'warn' });
+
+    // 2 seguimientos vencidos / hoy
+    add('vencidos', 'Seguimientos vencidos y de hoy',
+      filas.filter(f => f.fechaSeg && !f.cerrado && f.estado.grupo !== 'descartada' && diasEntre(f.fechaSeg, hoy) >= 0)
+        .sort((a, b) => diasEntre(b.fechaSeg, hoy) - diasEntre(a.fechaSeg, hoy))
+        .map(f => { const d = diasEntre(f.fechaSeg, hoy); return {
+          f, chip: d === 0 ? 'hoy' : `${d} d`, tono: d === 0 ? 'warn' : 'crit',
+          motivo: `${d === 0 ? 'Seguimiento hoy' : `Seguimiento vencido ${hace(d)} (${fmtCorta(f.fechaSeg)})`}${f.proxAccion ? ' · ' + f.proxAccion : ''}`,
+        }; }), { tono: 'crit' });
+
+    // 3 sugeridas
+    add('sugeridas', 'Sugeridas por decidir',
+      filas.filter(f => f.estado.grupo === 'sugerida')
+        .sort((a, b) => (b.match ?? -1) - (a.match ?? -1) || (b.diasCreado ?? 0) - (a.diasCreado ?? 0))
+        .map(f => { const d = f.diasCreado ?? 0; return {
+          f, chip: d >= 7 ? 'probablemente cerrada' : d >= 3 ? 'decidir pronto' : hace(d), tono: d >= 7 ? 'crit' : d >= 3 ? 'warn' : '',
+          motivo: `Sugerida ${hace(d)}${f.match != null ? ` · Match ${f.match}/100` : ''} · Sueldo: ${f.sueldo || 'No indicado'}`,
+        }; }), { tono: 'warn' });
+
+    // 4 estancadas
+    const estancadas = [];
+    for (const f of filas) {
+      if (f.estado.canon === 'Postulado' && f.dias != null && f.dias >= DIAS_ESTANCADA && !f.f1 && !f.f2 && !f.fechaSeg) {
+        const marcar = f.dias >= DIAS_SIN_RESPUESTA;
+        estancadas.push({ f, dias: f.dias, chip: `${f.dias} d`, tono: marcar ? 'crit' : 'warn',
+          motivo: `Postulada ${hace(f.dias)}, sin respuesta · ${marcar ? 'marcar Sin respuesta' : 'hacer seguimiento'}` });
+      } else if (f.enProceso && !f.fechaSeg && f.estado.canon !== 'Oferta recibida') {
+        const ultima = [f.f1, f.f2, f.fechaEf].filter(Boolean).sort().pop();
+        if (ultima && diasEntre(ultima, hoy) >= 5) {
+          estancadas.push({ f, dias: diasEntre(ultima, hoy), chip: `${diasEntre(ultima, hoy)} d`, tono: 'warn',
+            motivo: `${f.estado.canon} · última fecha ${fmtCorta(ultima)}, sin próxima acción registrada` });
+        }
+      }
+    }
+    estancadas.sort((a, b) => b.dias - a.dias);
+    add('estancadas', `Postulaciones estancadas (más de ${DIAS_ESTANCADA} días)`, estancadas, { tono: 'warn' });
+
+    // 5 programados
+    add('programados', 'Seguimientos programados (próximos 7 días)',
+      filas.filter(f => f.fechaSeg && !f.cerrado && diasEntre(hoy, f.fechaSeg) >= 1 && diasEntre(hoy, f.fechaSeg) <= 7)
+        .sort((a, b) => (a.fechaSeg > b.fechaSeg ? 1 : -1))
+        .map(f => ({ f, chip: fmtConDia(f.fechaSeg), tono: '', motivo: `Seguimiento ${fmtConDia(f.fechaSeg)}${f.proxAccion ? ' · ' + f.proxAccion : ''}` })),
+      { abierto: false, cuenta: false });
+
+    // 6 datos incompletos
+    const datos = [];
+    let nAplicado = 0, nSueldoBot = 0;
+    for (const f of filas) {
+      if (f.estado.grupo === 'sin_estado') datos.push({ f, chip: 'sin estado', tono: 'warn', motivo: 'Asigna un estado en Airtable' });
+      if (f.estado.grupo === 'desconocido') datos.push({ f, chip: 'estado', tono: 'warn', motivo: `Estado "${f.estado.canon}" no reconocido por el panel` });
+      if (f.fechaEstimada && (f.activo || f.cerrado)) datos.push({ f, chip: `≈ ${fmtCorta(f.creado)}`, tono: '', motivo: 'Sin Fecha de postulación: se usa la fecha de creación. Complétala en Airtable' });
+      if (f.estado.canon === '1ª entrevista agendada' && !f.f1) datos.push({ f, chip: 'fecha', tono: 'warn', motivo: 'Falta la Fecha 1ª entrevista' });
+      if (f.estado.canon === '2ª entrevista agendada' && !f.f2) datos.push({ f, chip: 'fecha', tono: 'warn', motivo: 'Falta la Fecha 2ª entrevista' });
+      if (f.estado.canon === '1ª entrevista agendada' && f.f1 && diasEntre(f.f1, hoy) > 0) datos.push({ f, chip: 'estado', tono: 'warn', motivo: `La 1ª entrevista fue el ${fmtCorta(f.f1)}: ¿actualizar a realizada?` });
+      if (f.estado.canon === '2ª entrevista agendada' && f.f2 && diasEntre(f.f2, hoy) > 0) datos.push({ f, chip: 'estado', tono: 'warn', motivo: `La 2ª entrevista fue el ${fmtCorta(f.f2)}: ¿actualizar a realizada?` });
+      if (f.fechaPost && f.f1 && diasEntre(f.fechaPost, f.f1) < 0) datos.push({ f, chip: 'fechas', tono: 'warn', motivo: 'La 1ª entrevista es anterior a la postulación' });
+      if (f.estadoRaw === 'Aplicado') nAplicado++;
+      if (f.sueldoBot) nSueldoBot++;
+    }
+    if (nAplicado) datos.push({ f: null, chip: `${nAplicado}`, tono: '', motivo: `${plural(nAplicado, 'registro', 'registros')} con el estado antiguo "Aplicado" (se cuentan como Postulado)` });
+    if (nSueldoBot) datos.push({ f: null, chip: `${nSueldoBot}`, tono: '', motivo: `${plural(nSueldoBot, 'registro', 'registros')} con "Sueldo mensual confirmado" escrito por el buscador: es el rango publicado, no un sueldo confirmado` });
+    add('datos', 'Datos incompletos', datos, { abierto: false, cuenta: false });
+
+    return grupos;
+  }
+
+  // ---------- estado de la página ----------
+  const state = {
+    mcp: null, records: null, d: null, storedAt: null, revalidating: false, error: null,
+    expandidas: new Set(), sort: { key: 'fecha', dir: 'desc' }, retryPending: false, gen: 0,
+  };
+
+  // ---------- render: cabecera / banner ----------
+  function setConn(estado, texto) { const c = $('#conn'); c.dataset.state = estado; c.lastElementChild.textContent = texto; }
+  function setBanner(kind, titulo, texto) {
+    const b = $('#banner');
+    if (!kind) { b.hidden = true; clear(b); return; }
+    clear(b); b.dataset.kind = kind; b.hidden = false;
+    b.append(el('div', {}, el('b', { text: titulo }), el('p', { text: texto })));
+  }
+  function renderFrescura() {
+    const s = $('#sub-fresh');
+    if (!state.storedAt) { s.textContent = ''; return; }
+    const min = Math.max(0, Math.round((Date.now() - state.storedAt) / 60000));
+    s.textContent = `· actualizado ${fmtHora.format(new Date(state.storedAt))}${min >= 1 ? ` (${hace(0) === 'hoy' && min < 60 ? `hace ${min} min` : `hace ${Math.round(min / 60)} h`})` : ''}${state.revalidating ? ' · actualizando…' : ''}`;
+    if (state.error && state.error.retryable) setConn('stale', `Datos de las ${fmtHora.format(new Date(state.storedAt))}`);
+    else if (min > 15) setConn('stale', `Hace ${min} min`);
+    else if (!state.error) setConn('ok', 'Conectado');
+  }
+
+  // ---------- render: KPIs ----------
+  function kpi(label, val, sub, tone) {
+    const v = el('div', { class: 'val' });
+    if (typeof val === 'object' && val) { v.append(val.main, el('small', { text: val.small })); } else v.textContent = val;
+    return el('div', { class: 'kpi', 'data-tone': tone || null }, el('div', { class: 'eyebrow', text: label }), v, el('div', { class: 'sub', text: sub || '' }));
+  }
+  function renderKpis(d) {
+    const k = clear($('#kpis'));
+    const nAcc = d.acciones.filter(g => g.cuenta).reduce((s, g) => s + g.items.length, 0);
+    const nCrit = d.acciones.filter(g => g.cuenta).reduce((s, g) => s + g.items.filter(i => i.tono === 'crit').length, 0);
+    k.append(kpi('Acciones pendientes', nAcc, nAcc ? (nCrit ? `${nCrit} urgentes` : 'ninguna urgente') : 'al día', nCrit ? 'crit' : null));
+    k.append(kpi('Pipeline activo', d.activas.length, `${d.proceso.length} en proceso · ${d.sugeridas.length} sugeridas`));
+    const p = d.proximas[0];
+    k.append(p
+      ? kpi('Próxima entrevista', { main: fmtConDia(p.fecha), small: dentro(p.en) }, `${p.k} · ${p.f.empresa}`, p.en <= 1 ? 'good' : null)
+      : kpi('Próxima entrevista', '—', 'sin entrevistas agendadas'));
+    k.append(kpi('Esta semana', d.estaSemana, `semana pasada: ${d.semanaPasada}`));
+    const nP = d.P.length;
+    const tr = nP ? Math.round(100 * d.avanzaron.length / nP) : 0;
+    k.append(kpi('Tasa de respuesta', { main: `${tr} %`, small: '' }, `${d.avanzaron.length} de ${nP} postuladas`));
+    const tc = nP ? Math.round(100 * d.rechazadas.length / nP) : 0;
+    k.append(kpi('Tasa de rechazo', { main: `${tc} %`, small: '' }, `${d.rechazadas.length} rechazadas · ${d.sinResp.length} sin respuesta · ${d.retiradas.length} retiradas`));
+  }
+
+  // ---------- render: acciones ----------
+  function linkIcons(f) {
+    const links = el('span', { class: 'links' });
+    if (f.url) links.append(el('a', { class: 'ico', href: f.url, target: '_blank', rel: 'noopener', title: 'Abrir la vacante', 'aria-label': 'Abrir la vacante', onclick: e => e.stopPropagation() }, '↗'));
+    links.append(el('a', { class: 'ico', href: `https://airtable.com/${BASE}/${TABLA}/${f.id}`, target: '_blank', rel: 'noopener', title: 'Abrir en Airtable', 'aria-label': 'Abrir en Airtable', onclick: e => e.stopPropagation() }, 'A'));
+    return links;
+  }
+  function renderAcciones(d) {
+    const root = clear($('#acciones'));
+    const total = d.acciones.reduce((s, g) => s + g.items.length, 0);
+    $('#acc-hint').textContent = total ? `${plural(total, 'ítem', 'ítems')} en ${d.acciones.filter(g => g.items.length).length} grupos` : 'nada pendiente';
+    if (!total) { root.append(el('div', { class: 'placeholder', text: 'Nada pendiente. Todo al día.' })); return; }
+    for (const g of d.acciones) {
+      if (!g.items.length) continue;
+      const det = el('details', { class: 'grp', open: g.abierto });
+      det.append(el('summary', {}, g.titulo, el('span', { class: 'n', 'data-tone': g.tono || null, text: String(g.items.length) })));
+      const ul = el('ul');
+      const LIM = 5;
+      const pintar = (items) => { clear(ul); for (const it of items) ul.append(itemAccion(it)); };
+      pintar(g.items.slice(0, LIM));
+      det.append(ul);
+      if (g.items.length > LIM) {
+        const more = el('div', { class: 'more' });
+        const btn = el('button', { class: 'btn-link', text: `ver ${g.items.length - LIM} más` });
+        btn.addEventListener('click', () => { pintar(g.items); more.remove(); });
+        more.append(btn); det.append(more);
+      }
+      root.append(det);
+    }
+  }
+  function itemAccion(it) {
+    const f = it.f;
+    const li = el('li');
+    const who = el('div', { class: 'who' });
+    if (f) {
+      who.append(el('div', {}, el('b', { text: f.empresa }), ' — ', f.puesto));
+    }
+    who.append(el('div', { class: 'why', text: it.motivo }));
+    const row = el('div', { class: 'item', role: f ? 'button' : null, tabindex: f ? '0' : null },
+      el('span', { class: 'chip', 'data-tone': it.tono || null, text: it.chip }), who, f ? linkIcons(f) : el('span'));
+    if (f) {
+      const ir = () => irAFila(f.id);
+      row.addEventListener('click', ir);
+      row.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ir(); } });
+    }
+    li.append(row);
+    return li;
+  }
+  function irAFila(id) {
+    let tr = document.getElementById('row-' + id);
+    if (!tr) {
+      $('#f-estado').value = ''; $('#f-fuente').value = ''; $('#f-q').value = ''; $('#f-cerr').checked = false;
+      renderTabla(state.d);
+      tr = document.getElementById('row-' + id);
+    }
+    if (!tr) return;
+    tr.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    tr.classList.remove('flash'); void tr.offsetWidth; tr.classList.add('flash');
+    if (!state.expandidas.has(id)) { state.expandidas.add(id); renderTabla(state.d); document.getElementById('row-' + id)?.scrollIntoView({ block: 'center' }); }
+  }
+
+  // ---------- tooltip ----------
+  const tip = $('#tip');
+  function showTip(evt, titulo, filas) {
+    clear(tip);
+    tip.append(el('b', { text: titulo }));
+    for (const r of filas) {
+      if (typeof r === 'string') tip.append(el('div', { class: 'muted', text: r }));
+      else tip.append(el('div', { class: 'row' }, r.color ? el('i', { style: `background:${r.color}` }) : null, el('span', {}, el('strong', { text: r.valor }), ' ', el('span', { class: 'muted', text: r.nombre }))));
+    }
+    tip.hidden = false;
+    moveTip(evt);
+  }
+  function moveTip(evt) {
+    const x = (evt.clientX ?? 0) + 14, y = (evt.clientY ?? 0) + 14;
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    tip.style.left = Math.min(x, window.innerWidth - w - 8) + 'px';
+    tip.style.top = Math.min(y, window.innerHeight - h - 8) + 'px';
+  }
+  function hideTip() { tip.hidden = true; }
+  function hit(node, titulo, filas) {
+    node.classList.add('hit'); node.setAttribute('tabindex', '0'); node.setAttribute('role', 'img');
+    node.setAttribute('aria-label', `${titulo}: ${filas.map(r => typeof r === 'string' ? r : `${r.nombre} ${r.valor}`).join(', ')}`);
+    node.addEventListener('pointerenter', e => showTip(e, titulo, filas));
+    node.addEventListener('pointermove', moveTip);
+    node.addEventListener('pointerleave', hideTip);
+    node.addEventListener('focus', e => { const r = node.getBoundingClientRect(); showTip({ clientX: r.left + r.width / 2, clientY: r.top }, titulo, filas); });
+    node.addEventListener('blur', hideTip);
+    return node;
+  }
+
+  // ---------- render: estado actual (barras horizontales) ----------
+  const twinTables = {};
+  function renderEstado(d) {
+    const root = clear($('#estado'));
+    const filas = d.estadoFilas;
+    const max = Math.max(1, ...filas.map(r => r.n));
+    const W = 520, LW = 168, RW = 40, rowH = 24, gapSep = 10;
+    const seps = filas.filter(r => r.tipo !== 'etapa').length ? 1 : 0;
+    const otros = filas.filter(r => r.tipo === 'otro').length ? 1 : 0;
+    const H = filas.length * rowH + (seps + otros) * gapSep + 8;
+    const s = svg('svg', { class: 'chart', viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Registros por estado' });
+    const plotW = W - LW - RW;
+    const ramp = ['var(--o1)', 'var(--o2)', 'var(--o3)', 'var(--o4)', 'var(--o5)', 'var(--o6)', 'var(--o7)'];
+    let y = 4, lastTipo = 'etapa';
+    s.append(svg('line', { class: 'axis', x1: LW, y1: 2, x2: LW, y2: H - 2 }));
+    for (const r of filas) {
+      if (r.tipo !== lastTipo) { y += gapSep; s.append(svg('line', { class: 'sep', x1: LW - 6, y1: y - gapSep / 2, x2: W - RW, y2: y - gapSep / 2 })); lastTipo = r.tipo; }
+      const bw = Math.max(r.n ? 3 : 0, Math.round(plotW * r.n / max));
+      const color = r.tipo === 'etapa' ? ramp[r.paso] : 'var(--gray-mark)';
+      s.append(svg('text', { class: 'lbl', x: LW - 10, y: y + rowH / 2 + 4, 'text-anchor': 'end' }, r.nombre));
+      const g = svg('g');
+      if (r.n) g.append(svg('path', { class: 'mark', d: barraH(LW + 1, y + 4, bw, rowH - 8), fill: color }));
+      g.append(svg('text', { class: 'val', x: LW + 1 + bw + 6, y: y + rowH / 2 + 4 }, String(r.n)));
+      const h = svg('rect', { x: LW, y, width: plotW + RW, height: rowH });
+      s.append(g, hit(h, r.nombre, [{ valor: String(r.n), nombre: r.n === 1 ? 'registro' : 'registros' }]));
+      y += rowH;
+    }
+    root.append(s);
+    const m = d.medianaEntrevista;
+    $('#estado-foot').textContent = `Mediana postulación → 1ª entrevista: ${m.n >= 2 ? `${Math.round(m.valor)} d (n=${m.n})` : '— (sin datos suficientes)'} · Alcanzaron entrevista u oferta: ${d.avanzaron.length}`;
+    twinTables.estado = () => tablaTwin(['Estado', 'Registros'], filas.map(r => [r.nombre, r.n]));
+  }
+  function barraH(x, y, w, h, r = 4) {
+    if (w <= r) return `M${x},${y} h${w} v${h} h${-w} z`;
+    return `M${x},${y} h${w - r} a${r},${r} 0 0 1 ${r},${r} v${h - 2 * r} a${r},${r} 0 0 1 ${-r},${r} h${-(w - r)} z`;
+  }
+  function barraV(x, y, w, h, r = 4) {
+    if (h <= r) return `M${x},${y} h${w} v${h} h${-w} z`;
+    return `M${x},${y + r} a${r},${r} 0 0 1 ${r},${-r} h${w - 2 * r} a${r},${r} 0 0 1 ${r},${r} v${h - r} h${-w} z`;
+  }
+
+  // ---------- render: semanas (columnas) ----------
+  function renderSemanas(d) {
+    const root = clear($('#semanas'));
+    const sem = d.semanas;
+    const max = Math.max(1, ...sem.map(s => s.n));
+    const W = 460, H = 190, padL = 30, padR = 10, padT = 18, padB = 34;
+    const plotW = W - padL - padR, plotH = H - padT - padB;
+    const s = svg('svg', { class: 'chart', viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Postulaciones por semana' });
+    const ticks = niceTicks(max);
+    for (const t of ticks) {
+      const yy = padT + plotH - plotH * t / ticks[ticks.length - 1];
+      s.append(svg('line', { class: 'grid', x1: padL, y1: yy, x2: W - padR, y2: yy }));
+      s.append(svg('text', { class: 'tick', x: padL - 6, y: yy + 4, 'text-anchor': 'end' }, String(t)));
+    }
+    const top = ticks[ticks.length - 1];
+    const slot = plotW / sem.length, bw = Math.min(24, slot * 0.6);
+    sem.forEach((w, i) => {
+      const x = padL + slot * i + (slot - bw) / 2;
+      const h = Math.round(plotH * w.n / top);
+      const y = padT + plotH - h;
+      const g = svg('g');
+      if (w.n) g.append(svg('path', { class: 'mark', d: barraV(x, y, bw, h), fill: w.enCurso ? 'var(--c1)' : 'var(--o2)' }));
+      g.append(svg('text', { class: 'val', x: x + bw / 2, y: y - 5, 'text-anchor': 'middle' }, String(w.n)));
+      g.append(svg('text', { class: 'tick', x: x + bw / 2, y: padT + plotH + 14, 'text-anchor': 'middle' }, `${w.lunes.slice(8, 10)}/${w.lunes.slice(5, 7)}`));
+      if (w.enCurso) g.append(svg('text', { class: 'tick', x: x + bw / 2, y: padT + plotH + 27, 'text-anchor': 'middle' }, 'en curso'));
+      const hr = svg('rect', { x: padL + slot * i, y: padT, width: slot, height: plotH + padB });
+      s.append(g, hit(hr, `Semana del ${fmtLarga(w.lunes)}${w.enCurso ? ' (en curso)' : ''}`,
+        [{ valor: String(w.n), nombre: w.n === 1 ? 'postulación' : 'postulaciones', color: w.enCurso ? '#2a78d6' : '#6da7ec' }, ...w.empresas.slice(0, 5), ...(w.empresas.length > 5 ? [`y ${w.empresas.length - 5} más`] : [])]));
+    });
+    s.append(svg('line', { class: 'axis', x1: padL, y1: padT + plotH, x2: W - padR, y2: padT + plotH }));
+    root.append(s);
+    twinTables.semanas = () => tablaTwin(['Semana (lunes)', 'Postulaciones'], sem.map(w => [fmtLarga(w.lunes) + (w.enCurso ? ' (en curso)' : ''), w.n]));
+  }
+  function niceTicks(max) {
+    const step = max <= 5 ? 1 : max <= 10 ? 2 : max <= 25 ? 5 : 10;
+    const top = Math.ceil(max / step) * step;
+    const out = []; for (let t = 0; t <= top; t += step) out.push(t); return out;
+  }
+
+  // ---------- render: fuentes (barras apiladas) ----------
+  function renderFuentes(d) {
+    const root = clear($('#fuentes'));
+    const leg = clear($('#fuentes-legend'));
+    const filas = d.fuentesFilas;
+    if (!filas.length) { root.append(el('div', { class: 'placeholder', text: 'Sin postulaciones todavía.' })); return; }
+    const series = [
+      { k: 'avanzo', nombre: 'Avanzó', color: 'var(--c1)', hex: '#2a78d6' },
+      { k: 'pendiente', nombre: 'Pendiente', color: 'var(--c1-soft)', hex: '#9ec5f4' },
+      { k: 'cerrada', nombre: 'Cerrada sin avance', color: 'var(--gray-mark)', hex: '#bfc5ce' },
+    ];
+    for (const sr of series) leg.append(el('span', {}, el('i', { style: `background:${sr.color}` }), sr.nombre));
+    const max = Math.max(1, ...filas.map(r => r.total));
+    const W = 420, LW = 118, RW = 34, rowH = 26;
+    const H = filas.length * rowH + 8;
+    const plotW = W - LW - RW;
+    const s = svg('svg', { class: 'chart', viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Resultado por fuente' });
+    s.append(svg('line', { class: 'axis', x1: LW, y1: 2, x2: LW, y2: H - 2 }));
+    filas.forEach((r, i) => {
+      const y = 4 + i * rowH;
+      s.append(svg('text', { class: 'lbl', x: LW - 10, y: y + rowH / 2 + 4, 'text-anchor': 'end' }, r.fuente));
+      let x = LW + 1;
+      const g = svg('g');
+      for (const sr of series) {
+        const n = r[sr.k]; if (!n) continue;
+        const w = Math.max(3, Math.round(plotW * n / max)) - 2;
+        g.append(svg('rect', { class: 'mark', x, y: y + 5, width: w, height: rowH - 10, rx: 2, fill: sr.color }));
+        if (w >= 18) g.append(svg('text', { class: sr.k === 'pendiente' || sr.k === 'cerrada' ? 'val' : 'val-in', x: x + w / 2, y: y + rowH / 2 + 4, 'text-anchor': 'middle' }, String(n)));
+        x += w + 2;
+      }
+      g.append(svg('text', { class: 'val', x: x + 5, y: y + rowH / 2 + 4 }, String(r.total)));
+      const h = svg('rect', { x: LW, y, width: plotW + RW, height: rowH });
+      s.append(g, hit(h, r.fuente, [
+        ...series.map(sr => ({ valor: `${r[sr.k]} (${Math.round(100 * r[sr.k] / r.total)} %)`, nombre: sr.nombre, color: sr.hex })),
+        `${r.total} postuladas`,
+      ]));
+    });
+    root.append(s);
+    twinTables.fuentes = () => tablaTwin(['Fuente', 'Avanzó', 'Pendiente', 'Cerrada sin avance', 'Total'], filas.map(r => [r.fuente, r.avanzo, r.pendiente, r.cerrada, r.total]));
+  }
+
+  function tablaTwin(cabeceras, filas) {
+    const t = el('table');
+    t.append(el('thead', {}, el('tr', {}, ...cabeceras.map((c, i) => el('th', { class: i ? 'num' : null, text: c })))));
+    t.append(el('tbody', {}, ...filas.map(r => el('tr', {}, ...r.map((v, i) => el('td', { class: i ? 'num' : null, text: String(v) }))))));
+    return el('div', { class: 'twin' }, t);
+  }
+  document.querySelectorAll('[data-twin]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.twin; const host = document.getElementById(id);
+      const mostrandoTabla = btn.dataset.on === '1';
+      if (mostrandoTabla) { btn.dataset.on = '0'; btn.textContent = 'Ver tabla'; rerenderChart(id); }
+      else if (twinTables[id]) { btn.dataset.on = '1'; btn.textContent = 'Ver gráfico'; clear(host).append(twinTables[id]()); }
+    });
+  });
+  function rerenderChart(id) {
+    if (!state.d) return;
+    ({ estado: renderEstado, semanas: renderSemanas, fuentes: renderFuentes })[id](state.d);
+  }
+  function chartMode(id) { const b = document.querySelector(`[data-twin="${id}"]`); return b && b.dataset.on === '1' ? 'tabla' : 'grafico'; }
+
+  // ---------- render: perfil ----------
+  function renderPerfil(d) {
+    const root = clear($('#perfil'));
+    const bloque = (titulo, pares) => el('div', { style: 'display:flex;flex-direction:column;gap:6px;margin-bottom:10px' },
+      el('div', { class: 'eyebrow', text: titulo }),
+      el('div', { class: 'chips' }, ...pares.map(([k, n]) => el('span', { class: 'chip-c' }, k, el('b', { text: String(n) })))));
+    root.append(bloque('País', d.perfil.pais.length ? d.perfil.pais : [['Sin datos', 0]]));
+    root.append(bloque('Tipo de trabajo', d.perfil.tipo.length ? d.perfil.tipo : [['Sin datos', 0]]));
+    root.append(el('div', { class: 'card-foot', text: `${d.perfil.cvs} de ${d.P.length} postuladas tienen CV adaptado registrado` }));
+  }
+
+  // ---------- render: tabla ----------
+  function pill(f) { return el('span', { class: 'pill', 'data-g': f.estado.grupo, text: f.estado.canon }); }
+  function ultimoFeedback(fb) {
+    const partes = String(fb || '').split(/\n(?=\[\d{2}-\d{2}-\d{4}\])/).map(s => s.trim()).filter(Boolean);
+    const ult = partes.length ? partes[partes.length - 1] : '';
+    return ult.length > 120 ? ult.slice(0, 118).trimEnd() + '…' : ult;
+  }
+  function filtrosActuales() {
+    return { estado: $('#f-estado').value, fuente: $('#f-fuente').value, q: sinAcentos($('#f-q').value.trim()), cerr: $('#f-cerr').checked };
+  }
+  function pasaFiltro(f, fl) {
+    if (fl.estado) {
+      if (fl.estado.startsWith('g:')) { if (!fl.estado.slice(2).split(',').includes(f.estado.grupo)) return false; }
+      else if (f.estado.canon !== fl.estado) return false;
+    }
+    if (fl.fuente && f.fuente !== fl.fuente) return false;
+    if (fl.cerr && f.cerrado) return false;
+    if (fl.q) {
+      const hay = sinAcentos([f.empresa, f.puesto, f.feedback, f.proxAccion, f.cv, f.pais, f.tipo].join(' '));
+      if (!hay.includes(fl.q)) return false;
+    }
+    return true;
+  }
+  function comparador(sort) {
+    const dir = sort.dir === 'asc' ? 1 : -1;
+    const key = {
+      empresa: f => sinAcentos(f.empresa), estado: f => f.estado.orden, fecha: f => f.fechaEf || '', dias: f => f.dias ?? -1, fuente: f => sinAcentos(f.fuente),
+    }[sort.key];
+    return (a, b) => { const ka = key(a), kb = key(b); if (ka < kb) return -dir; if (ka > kb) return dir; return (b.creadoISO > a.creadoISO ? 1 : -1); };
+  }
+  function renderFiltros(d) {
+    const fe = $('#f-estado-list'); const val = $('#f-estado').value; clear(fe);
+    for (const e of d.estadosPresentes) fe.append(el('option', { value: e, text: e }));
+    $('#f-estado').value = val;
+    const ff = $('#f-fuente'); const vf = ff.value; clear(ff); ff.append(el('option', { value: '', text: 'Todas las fuentes' }));
+    for (const s of d.fuentesPresentes) ff.append(el('option', { value: s, text: s }));
+    ff.value = vf;
+  }
+  function renderTabla(d) {
+    const tb = clear($('#tbody'));
+    if (!d) return;
+    const fl = filtrosActuales();
+    const filas = d.filas.filter(f => pasaFiltro(f, fl)).sort(comparador(state.sort));
+    $('#f-count').textContent = `Mostrando ${filas.length} de ${d.filas.length}`;
+    document.querySelectorAll('.tbl th button').forEach(b => { if (b.dataset.sort === state.sort.key) b.dataset.dir = state.sort.dir; else delete b.dataset.dir; });
+    if (!filas.length) { tb.append(el('tr', {}, el('td', { colspan: 9, class: 'empty', text: d.filas.length ? 'Ningún registro coincide con los filtros.' : 'Aún no hay postulaciones; el buscador agrega filas cada mañana.' }))); return; }
+    for (const f of filas) {
+      const tr = el('tr', { class: 'row' + (f.cerrado ? ' cerrada' : ''), id: 'row-' + f.id, tabindex: '0', 'aria-expanded': state.expandidas.has(f.id) ? 'true' : 'false' });
+      const who = el('div', { class: 'who' }, el('b', { text: f.empresa }), el('div', { class: 'p', text: f.puesto }));
+      const r = el('div', { class: 'r' });
+      if (f.match != null) r.append(el('span', { class: 'match', text: `Match ${f.match}`, title: 'Match estimado por el buscador' }));
+      r.append(linkIcons(f));
+      who.append(r);
+      tr.append(el('td', {}, who));
+      tr.append(el('td', {}, pill(f)));
+      tr.append(el('td', { class: 'num', text: f.fechaEf ? (f.fechaEstimada ? '≈ ' : '') + fmtCorta(f.fechaEf) : '—', title: f.fechaEstimada ? 'Fecha estimada por creación del registro' : null }));
+      tr.append(el('td', { class: 'num', text: f.dias == null ? '—' : String(f.dias) }));
+      tr.append(el('td', { text: f.fuente || '—' }));
+      tr.append(el('td', { class: 'col-hide', text: [f.pais, f.tipo].filter(Boolean).join(' · ') || '—' }));
+      tr.append(el('td', { class: 'col-hide', text: f.sueldo ? `${f.sueldo}${f.sueldoEtiqueta ? ' ' + f.sueldoEtiqueta : ''}` : '—' }));
+      const seg = el('div', { class: 'seg' });
+      if (f.fechaSeg) { const dd = diasEntre(f.fechaSeg, d.hoy); seg.append(el('span', { class: 'd', 'data-tone': f.cerrado ? null : dd > 0 ? 'crit' : dd === 0 ? 'warn' : null, text: fmtCorta(f.fechaSeg) }), ' '); }
+      seg.append(f.proxAccion || (f.fechaSeg ? '' : '—'));
+      tr.append(el('td', {}, seg));
+      tr.append(el('td', {}, el('div', { class: 'fb', text: ultimoFeedback(f.feedback) || '—' })));
+      const toggle = () => { if (state.expandidas.has(f.id)) state.expandidas.delete(f.id); else state.expandidas.add(f.id); renderTabla(d); };
+      tr.addEventListener('click', e => { if (e.target.closest('a')) return; toggle(); });
+      tr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+      tb.append(tr);
+      if (state.expandidas.has(f.id)) tb.append(filaDetalle(f));
+    }
+  }
+  function filaDetalle(f) {
+    const campo = (k, v) => el('div', {}, el('b', { text: k }), v || '—');
+    const grid = el('div', { class: 'detail-grid' },
+      campo('CV utilizado', f.cv), campo('Fecha de postulación', f.fechaPost ? fmtLarga(f.fechaPost) : (f.fechaEstimada ? `≈ ${fmtLarga(f.creado)} (creación)` : '—')),
+      campo('Creado', f.creado ? fmtLarga(f.creado) : '—'),
+      campo('Fecha 1ª entrevista', f.f1 ? fmtLarga(f.f1) : ''), campo('Fecha 2ª entrevista', f.f2 ? fmtLarga(f.f2) : ''),
+      campo('Estado en Airtable', f.estadoRaw), campo('Rango salarial publicado', f.rangoPub), campo('Sueldo mensual confirmado', f.sueldoConf),
+      campo('Fecha de seguimiento', f.fechaSeg ? fmtLarga(f.fechaSeg) : ''));
+    const td = el('td', { colspan: 9 }, grid);
+    if (f.proxAccion) td.append(el('div', { style: 'margin-top:10px;font-size:12.5px' }, el('b', { style: 'font-weight:500;color:var(--ink-2)', text: 'Próxima acción: ' }), f.proxAccion));
+    td.append(el('pre', { text: f.feedback || 'Sin feedback ni brechas registradas.' }));
+    return el('tr', { class: 'detail' }, td);
+  }
+  ['#f-estado', '#f-fuente', '#f-cerr'].forEach(s => $(s).addEventListener('change', () => renderTabla(state.d)));
+  $('#f-q').addEventListener('input', () => renderTabla(state.d));
+  document.querySelectorAll('.tbl th button').forEach(b => b.addEventListener('click', () => {
+    const k = b.dataset.sort;
+    if (state.sort.key === k) state.sort.dir = state.sort.dir === 'asc' ? 'desc' : 'asc';
+    else state.sort = { key: k, dir: k === 'fecha' || k === 'dias' ? 'desc' : 'asc' };
+    renderTabla(state.d);
+  }));
+
+  // ---------- render total ----------
+  function renderTodo() {
+    const d = state.d;
+    if (!d) return;
+    $('#sub-count').textContent = `${plural(d.filas.length, 'registro', 'registros')} · Tabla Postulaciones`;
+    renderKpis(d); renderAcciones(d);
+    for (const id of ['estado', 'semanas', 'fuentes']) {
+      if (chartMode(id) === 'tabla') { ({ estado: renderEstado, semanas: renderSemanas, fuentes: renderFuentes })[id](d); clear(document.getElementById(id)).append(twinTables[id]()); }
+      else ({ estado: renderEstado, semanas: renderSemanas, fuentes: renderFuentes })[id](d);
+    }
+    renderPerfil(d); renderFiltros(d); renderTabla(d);
+    document.querySelectorAll('.card, .kpis').forEach(n => n.classList.remove('loading'));
+  }
+  function setLoading(on) { document.querySelectorAll('.card, .kpis').forEach(n => n.classList.toggle('loading', on && !!state.d)); }
+
+  // ---------- datos en vivo ----------
+  function modoSinClaude() {
+    setConn('off', 'Fuera de claude.ai');
+    $('#btn-refresh').hidden = true;
+    setBanner('info', 'Esta página se abre dentro de claude.ai',
+      'Ábrela como artefacto en claude.ai para que lea la tabla Postulaciones con tu conector de Airtable. Fuera de claude.ai no puede consultar datos.');
+    clear($('#acciones')).append(el('div', { class: 'placeholder', text: 'Sin conexión con Airtable.' }));
+    clear($('#tbody')).append(el('tr', {}, el('td', { colspan: 9, class: 'empty', text: 'Sin datos: abre esta página dentro de claude.ai.' })));
+  }
+
+  function textoError(err) {
+    const code = err && err.code || 'upstream_error';
+    switch (code) {
+      case 'server_not_connected':
+      case 'selection_required':
+        return ['crit', 'Airtable no está conectado', 'Agrega (o elige) el conector Airtable en claude.ai → Configuración → Conectores y recarga la página.'];
+      case 'needs_reauth':
+        return ['crit', 'Hay que volver a conectar Airtable', 'Vuelve a conectar Airtable en claude.ai → Configuración → Conectores.'];
+      case 'not_in_manifest': case 'blocked_by_policy': case 'approval_required': case 'not_granted':
+      case 'capability_disabled': case 'capability_removed': case 'consent_required':
+        return ['crit', 'Sin permiso para leer Airtable', 'Esta vista no tiene permiso para consultar la tabla. Si rechazaste el aviso de consentimiento, recarga la página y acéptalo.'];
+      case 'tool_error':
+        return ['warn', 'Airtable devolvió un error', String(err.message || 'Sin detalle.')];
+      default:
+        return ['warn', err && err.retryable ? 'Sin conexión con Airtable' : `No se pudieron cargar los datos (${code})`,
+          err && err.retryable ? 'Se muestran los últimos datos recibidos. Se reintentará en unos segundos.' : String(err && err.message || 'Inténtalo con el botón Actualizar.')];
+    }
+  }
+  const RETRAEN = new Set(['server_not_connected', 'selection_required', 'needs_reauth', 'not_in_manifest', 'blocked_by_policy', 'approval_required', 'not_granted', 'capability_disabled', 'capability_removed', 'consent_required']);
+
+  function onError(err) {
+    state.error = err;
+    const [kind, titulo, texto] = textoError(err);
+    setBanner(kind, titulo, texto);
+    setLoading(false);
+    liberarBoton();
+    if (RETRAEN.has(err && err.code)) {
+      state.d = null; state.records = null; state.storedAt = null;
+      setConn('off', 'Sin acceso');
+      clear($('#acciones')).append(el('div', { class: 'placeholder', text: 'Sin acceso a Airtable.' }));
+      clear($('#kpis'));
+      clear($('#tbody')).append(el('tr', {}, el('td', { colspan: 9, class: 'empty', text: 'Sin acceso a Airtable.' })));
+      return;
+    }
+    if (state.storedAt) setConn('stale', `Datos de las ${fmtHora.format(new Date(state.storedAt))}`); else setConn('off', 'Sin datos');
+    if (err && err.retryable && !state.retryPending && state.mcp) {
+      state.retryPending = true;
+      const espera = (err.retryAfterMs || 3000) + Math.random() * 3000;
+      setTimeout(() => { state.mcp.invalidate(SERVER, TOOL).catch(() => {}); }, espera);
+    }
+  }
+
+  async function onData(result) {
+    const my = ++state.gen;
+    const p = result.payload || {};
+    let records = [...(p.records || [])];
+    let cursor = p.nextCursor, pages = 1;
+    const total = p.metadata && p.metadata.totalRecordCount;
+    while (cursor && pages < 50 && !(total && records.length >= total)) {
+      try {
+        const r = await state.mcp.callTool(SERVER, TOOL, { ...INPUT, cursor });
+        const q = r.payload || {};
+        if (!q.records || !q.records.length) break;
+        records.push(...q.records); cursor = q.nextCursor; pages++;
+      } catch (e) { setBanner('warn', 'Lista incompleta', `Se cargaron ${records.length}${total ? ` de ${total}` : ''} registros; la siguiente página falló.`); break; }
+    }
+    if (my !== state.gen) return;
+    const byId = new Map(records.map(r => [r.id, r]));
+    state.records = [...byId.values()];
+    state.error = null; state.retryPending = false;
+    state.storedAt = result.cache && result.cache.storedAt ? result.cache.storedAt : Date.now();
+    state.revalidating = !!(result.cache && result.cache.revalidating);
+    if (!(result.cache && result.cache.revalidating)) setBanner(null);
+    state.d = derivar(state.records, hoySantiago());
+    renderTodo(); renderFrescura(); liberarBoton();
+  }
+
+  let botonTimer = null;
+  function liberarBoton() { const b = $('#btn-refresh'); b.disabled = !state.mcp; b.textContent = 'Actualizar'; if (botonTimer) { clearTimeout(botonTimer); botonTimer = null; } }
+  $('#btn-refresh').addEventListener('click', async () => {
+    if (!state.mcp) return;
+    const b = $('#btn-refresh'); b.disabled = true; b.textContent = 'Actualizando…';
+    setLoading(true);
+    try { await state.mcp.invalidate(SERVER, TOOL); } catch (e) { /* nada en caché: el watch ya está vivo */ }
+    botonTimer = setTimeout(liberarBoton, 15000);
+  });
+
+  async function iniciar() {
+    let mcp = null;
+    try { mcp = window.claude && typeof window.claude.use === 'function' ? await window.claude.use('mcp') : null; } catch (e) { mcp = null; }
+    if (!mcp) { modoSinClaude(); return; }
+    state.mcp = mcp;
+    setConn('wait', 'Cargando…');
+    let unsub = null;
+    unsub = mcp.watchTool(SERVER, TOOL, INPUT, ev => {
+      if (ev.type === 'error') onError(ev.error);
+      else if (ev.type === 'data') onData(ev.result).catch(e => onError({ code: 'upstream_error', message: String(e && e.message || e) }));
+    }, { refetchInterval: 300000 });
+    window.addEventListener('pagehide', () => { if (unsub) unsub(); });
+    liberarBoton();
+  }
+
+  // reloj: recalcula "hoy" y la frescura cada minuto
+  let ultimoHoy = hoySantiago();
+  setInterval(() => {
+    renderFrescura();
+    const h = hoySantiago();
+    if (h !== ultimoHoy && state.records) { ultimoHoy = h; state.d = derivar(state.records, h); renderTodo(); }
+  }, 60000);
+
+  iniciar();
+})();
+</script>
