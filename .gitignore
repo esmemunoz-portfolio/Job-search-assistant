@@ -1,0 +1,23 @@
+# Claves y contraseñas: nunca al repositorio
+.env
+*.env
+!.env.example
+llaves.env
+
+# Datos personales y salidas generadas
+cv.txt
+cvs_generados/
+*.pdf
+historial_ofertas.json
+ultimas_ofertas_crudas.txt
+novedades_preview.html
+registro_ejecuciones.log
+*.log
+
+# Script antiguo de prueba (usa fpdf y contiene datos personales); no es parte del proyecto
+prueba_pdf.py
+
+# Python y sistema
+__pycache__/
+*.pyc
+.DS_Store
